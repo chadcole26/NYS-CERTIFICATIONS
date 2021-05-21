@@ -1,0 +1,48 @@
+<form action="/admin/faculty/facultypages/NYSCertifications.html?frn=~(frn)" method="POST">
+<div id="NYSCertEdit" class="data-container">
+
+<table class="grid">
+	~[tlist_sql;
+		SELECT
+			usersdcid,
+			id,
+			certificationareacode,
+			certificationtypecode,
+			effectivedate,
+			expirationdate
+		FROM u_nys_certifications
+		WHERE id = ~(gpv.editRecord)]
+	<tr>
+		<td class="bold">Certification Area</td>
+		<td>
+			<select name="CF-[USERS:~(usersdcid;t).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:~(id)]CERTIFICATIONAREACODE" id="CERTIFICATIONAREACODE2">
+				~[x:codesetoptions;codetype=NYS_CERT_AREA;includeblank;value=~(certificationareacode;t)]
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td class="bold">Certification Type</td>
+		<td>
+			<select name="CF-[USERS:~(usersdcid;t).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:~(id)]CERTIFICATIONTYPECODE" id="CERTIFICATIONTYPECODE2">
+				~[x:codesetoptions;codetype=NYS_CERT_TYPES;includeblank;value=~(certificationtypecode;t)]
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td class="bold">Effective Date</td>
+		<td><input type="text" name="CF-[USERS:~(usersdcid;t).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:~(id)]EFFECTIVEDATE" value="~(effectivedate;d)" size="10" class="psDateWidget" id="EFFECTIVEDATE2" />)</td>
+	</tr>
+	<tr>
+		<td class="bold">Expiration Date</td>
+		<td><input type="text" name="CF-[USERS:~(usersdcid;t).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:~(id)]EXPIRATIONDATE" value="~(expirationdate;d)" size="10" class="psDateWidget" id="EXPIRATIONDATE2" /></td>
+	</tr>
+	[/tlist_sql]
+</table>
+
+<div class="button-row">
+	<input type="hidden" name="ac" value="prim">~[submitbutton]
+</div>	
+
+</div>
+
+</form>
