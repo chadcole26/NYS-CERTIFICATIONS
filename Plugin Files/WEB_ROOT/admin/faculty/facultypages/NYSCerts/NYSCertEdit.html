@@ -7,7 +7,7 @@
         	<tr>
         		<td class="bold">Certification Area</td>
         		<td>
-        			<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONAREACODE" value="">
+        			<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONAREACODE" value="" required>
         			    ~[x:codesetoptions;codetype=NYS_CERT_AREA;includeblank;value="~([U_NYS_CERTIFICATIONS]CERTIFICATIONAREACODE)"]
         			</select>
         		</td>
@@ -15,7 +15,7 @@
         	<tr>
         		<td class="bold">Certification Type</td>
         		<td>
-        			<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONTYPECODE" id="CERTIFICATIONTYPECODE">
+        			<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONTYPECODE" id="CERTIFICATIONTYPECODE" required>
 						~[x:codesetoptions;codetype=NYS_CERT_TYPES;includeblank;value="~([U_NYS_CERTIFICATIONS]CERTIFICATIONTYPECODE)"]
 					</select>
         		</td>
@@ -23,7 +23,7 @@
         	<tr>
         		<td class="bold">Effective Date</td>
         		<td>
-        		    <input type="text" name="[U_NYS_CERTIFICATIONS]EFFECTIVEDATE" value="" class="psDateWidget" />
+        		    <input type="text" name="[U_NYS_CERTIFICATIONS]EFFECTIVEDATE" value="" class="psDateWidget" required/>
         		</td>
         	</tr>
         	<tr>

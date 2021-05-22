@@ -20,7 +20,7 @@
 		<div class="box-round">
 			<h2>NYS Ceritifications</h2>
 	
-			<table border="0" cellpadding="0" cellspacing="0" class="tablesorter grid" id="certificationTable"> 
+			<table border="0" cellpadding="0" cellspacing="0" class="liskDescList" id="certificationTable"> 
 				<thead> 
 					<tr>
 						<th class="left">Certification Area</th>
@@ -34,7 +34,7 @@
 								No need to do the TO_CHAR on dates if you identify the output below with the date indicator
 								Did not need to join users table since we already have the users dcid from their record and the extensions table -->
 					~[tlist_sql;
-            SELECT
+						SELECT
 							unc.id,
 							unc.usersdcid,
 							unc.certificationareacode,
@@ -48,58 +48,71 @@
 						JOIN codeset cs2 ON cs2.codetype='NYS_CERT_TYPES' AND cs2.code = unc.certificationtypecode
 						WHERE unc.usersdcid = ~(rn) ORDER BY cs1.displayvalue ASC]
 					<tr>
-						<td><a href="NYSCertEdit.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Edit NYS Certification Record" class="dialogM">~(unc.certificationareacode)</a> - ~(cs1.displayvalue)</td>
+						<td><a href="NYSCerts/NYSCertEdit.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Edit Record" class="dialogM dockedDialog">~(unc.certificationareacode)</a> - ~(cs1.displayvalue)</td>
 						<td>~(unc.certificationtypecode) - ~(cs2.displayvalue)</td> 
 						<td>~(unc.effectivedate;d)</td>  
 						<td>~(unc.expirationdate;d)</td>
-						<td><a href="NYSCertDelete.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Delete NYS Certification Record" class="dialogM">Delete</a></td>  
+						<td><a href="NYSCerts/NYSCertDelete.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Delete Record" class="dialogM dockedDialog">Delete</a></td>  
 					</tr>
 					[/tlist_sql]
+					<!--
+						<td><a href="NYSCertEdit.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Edit NYS Certification Record" class="dialogM">~(unc.certificationareacode)</a> - ~(cs1.displayvalue)</td>
+						<td><a href="NYSCertDelete.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Delete NYS Certification Record" class="dialogM">Delete</a></td>  -->
 				</tbody>
 			</table>
 			
-      <form method="POST">
-		  ~[DirectTable.Select:U_NYS_CERTIFICATIONS;id:-1]
-			<h2>NYS Certifications Input</h2>
-			<table class="linkDescList">
-				<thead>
-					<tr>
-						<th>Certification Area Code</th>
-						<th>Certification Type Code</th>
-						<th>Effective Date</th>
-						<th>Expiration Date</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONAREACODE" id="CERTIFICATIONAREACODE">
-							    ~[x:codesetoptions;codetype=NYS_CERT_AREA;includeblank;value=""]
-							</select>
-						</td>
-						<td>
-							<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONTYPECODE" id="CERTIFICATIONTYPECODE">
-							    ~[x:codesetoptions;codetype=NYS_CERT_TYPES;includeblank;value=""]
-							</select>
-						</td>
-						<td>
+			<div class="button-row"><a href="#addCertification" class="button dialogDivM dockedDialog" title="Add New Certification"  data-persistcontent="true">Add Certification</a></div>
+
+		</div>
+		
+		<!-- end of content of bounding box -->
+
+<div id="addCertification" class="hide">			
+	<form method="POST">
+		~[DirectTable.Select:U_NYS_CERTIFICATIONS;id:-1]
+		<h2>Add NYS Certification</h2>
+		
+		<div id="NYSCertAdd" class="box-round">
+		
+			<table class="grid">
+				<tr>
+					<td class="bold">Certification Area</td>
+					<td>
+						<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONAREACODE" id="CERTIFICATIONAREACODE" required>
+							~[x:codesetoptions;codetype=NYS_CERT_AREA;includeblank;value=""]
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="bold">Certification Type</td>
+					<td>
+						<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONTYPECODE" id="CERTIFICATIONTYPECODE" required>
+							~[x:codesetoptions;codetype=NYS_CERT_TYPES;includeblank;value=""]
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="bold">Effective Date</td>
+					<td>
 							<input type="text" name="[U_NYS_CERTIFICATIONS]EFFECTIVEDATE" value="" size="10" class="psDateWidget" id="EFFECTIVEDATE" required />
-						</td>
-						<td>
+					</td>
+				</tr>
+				<tr>
+					<td class="bold">Expiration Date</td>
+					<td>
 							<input type="text" name="[U_NYS_CERTIFICATIONS]EXPIRATIONDATE" value="" size="10" class="psDateWidget" id="EXPIRATIONDATE" />
-						</td>
-					</tr>
-				</tbody>
+					</td>
+				</tr>
 			</table>
 
 			<div class="button-row"><input type="hidden" name="ac" value="prim">~[submitbutton]</div>
-			
-		</form>
-
+		
 		</div>
-
-		<!-- end of content of bounding box -->
+		
+	</form>
+</div>
 
 		~[wc:admin_footer_frame_css]
 	</body>
+	
 </html><!-- end right frame -->
