@@ -10,17 +10,15 @@
 
 	<body>
 
-		<form action="/admin/faculty/facultypages/NYSCertifications.html?frn=~(frn)" method="POST">
-		
 		~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">~[text:psx.html.admin_faculty.schedulematrix.start_page]</a> &gt; <a href="/admin/faculty/search.html" target="_top">~[text:psx.html.admin_faculty.schedulematrix.staff]</a> &gt; <a href="/admin/faculty/home.html?selectteacher=nosearch" target="_top">~[text:psx.html.admin_faculty.schedulematrix.select_a_staff_member]</a> &gt;NYS Certifications<!-- breadcrumb end -->~[wc:admin_navigation_frame_css]
 
 		<span class="account-photo">~[facultytitlephoto]</span>
 		
-		<h1>NYS Certifications</h1>
+		<h1>NYS Certifications &nbsp;-&nbsp; ~(lastfirst) &nbsp; ~(teachernumber)</h1>
 
 		<!-- start of content and bounding box -->
 		<div class="box-round">
-			<h2>NYS Ceritifications Display</h2>
+			<h2>NYS Ceritifications</h2>
 	
 			<table border="0" cellpadding="0" cellspacing="0" class="tablesorter grid" id="certificationTable"> 
 				<thead> 
@@ -33,31 +31,35 @@
 				</thead> 
 				<tbody>
 					~[tlist_sql;
-					SELECT
-						ct.certificationareacode,
-						cs1.displayvalue,
-						ct.certificationtypecode,
-						cs2.displayvalue,
-						ct.effectivedate, -- no need to do the TO_CHAR if you identify the output below with the date indicator
-						ct.expirationdate, -- no need to do the TO_CHAR if you identify the output below with the date indicator
-						ct.id,
-						ct.usersdcid
-					FROM u_nys_certifications ct 
-					JOIN users u ON ct.usersdcid = u.dcid
-					JOIN codeset cs1 ON cs1.codetype='NYS_CERT_AREA' AND cs1.code = ct.certificationareacode
-					JOIN codeset cs2 ON cs2.codetype='NYS_CERT_TYPES' AND cs2.code = ct.certificationtypecode
-					WHERE u.dcid =  ~(rn) ORDER BY cs1.displayvalue ASC]
+						SELECT
+							unc.id,
+							unc.usersdcid,
+							unc.certificationareacode,
+							cs1.displayvalue,
+							unc.certificationtypecode,
+							cs2.displayvalue,
+							unc.effectivedate,
+							unc.expirationdate
+							-- no need to do the TO_CHAR on dates if you identify the output below with the date indicator ';d'
+						FROM u_nys_certifications unc
+						-- did need to join users table since we already have the users dcid from their record and the extensions table 
+						JOIN codeset cs1 ON cs1.codetype='NYS_CERT_AREA' AND cs1.code = unc.certificationareacode
+						JOIN codeset cs2 ON cs2.codetype='NYS_CERT_TYPES' AND cs2.code = unc.certificationtypecode
+						WHERE unc.usersdcid = ~(rn) ORDER BY cs1.displayvalue ASC]
 					<tr>
-						<td>~(ct.certificationareacode) - ~(cs1.displayvalue)</td>
-						<td>~(ct.certificationtypecode) - ~(cs2.displayvalue)</td> 
-						<td>~(ct.effectivedate;d)</td>  
-						<td>~(ct.expirationdate;d)</td>
-						<td><a href="NYSCertEdit.html?editRecord=~(ct.id)&usersFRN=005~(ct.usersdcid)" title="Edit NYS Certification Record" class="dialogM">Edit</a></td>  
+						<td><a href="NYSCertEdit.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Edit NYS Certification Record" class="dialogM">~(ct.certificationareacode) - ~(cs1.displayvalue)</a></td>
+						<td>~(unc.certificationtypecode) - ~(cs2.displayvalue)</td> 
+						<td>~(unc.effectivedate;d)</td>  
+						<td>~(unc.expirationdate;d)</td>
+						<td><a href="NYSCertDelete.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Delete NYS Certification Record" class="dialogM">Delete</a>
+						</td>  
 					</tr>
 					[/tlist_sql]
 				</tbody>
 			</table>
-		
+			
+      <form method="POST">
+		  ~[DirectTable.Select:U_NYS_CERTIFICATIONS;id:-1]
 			<h2>NYS Certifications Input</h2>
 			<table class="linkDescList">
 				<thead>
@@ -71,32 +73,33 @@
 				<tbody>
 					<tr>
 						<td>
-							<select name="CF-[USERS:~(rn).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:-1]CERTIFICATIONAREACODE" id="CERTIFICATIONAREACODE">
-							~[x:codesetoptions;codetype=NYS_CERT_AREA;includeblank;value=""]
+							<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONAREACODE" id="CERTIFICATIONAREACODE">
+							    ~[x:codesetoptions;codetype=NYS_CERT_AREA;includeblank;value=""]
 							</select>
 						</td>
 						<td>
-							<select name="CF-[USERS:~(rn).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:-1]CERTIFICATIONTYPECODE" id="CERTIFICATIONTYPECODE">
-							~[x:codesetoptions;codetype=NYS_CERT_TYPES;includeblank;value=""]
+							<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONTYPECODE" id="CERTIFICATIONTYPECODE">
+							    ~[x:codesetoptions;codetype=NYS_CERT_TYPES;includeblank;value=""]
 							</select>
 						</td>
 						<td>
-							<input type="text" name="CF-[USERS:~(rn).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:-1]EFFECTIVEDATE" value="" size="10" class="psDateWidget" id="EFFECTIVEDATE" required />
+							<input type="text" name="[U_NYS_CERTIFICATIONS]EFFECTIVEDATE" value="" size="10" class="psDateWidget" id="EFFECTIVEDATE" required />
 						</td>
 						<td>
-							<input type="text" name="CF-[USERS:~(rn).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:-1]EXPIRATIONDATE" value="" size="10" class="psDateWidget" id="EXPIRATIONDATE" />
+							<input type="text" name="[U_NYS_CERTIFICATIONS]EXPIRATIONDATE" value="" size="10" class="psDateWidget" id="EXPIRATIONDATE" />
 						</td>
 					</tr>
 				</tbody>
 			</table>
 
 			<div class="button-row"><input type="hidden" name="ac" value="prim">~[submitbutton]</div>
+			
+		</form>
 
 		</div>
 
 		<!-- end of content of bounding box -->
 
 		~[wc:admin_footer_frame_css]
-		</form>
 	</body>
 </html><!-- end right frame -->

@@ -1,47 +1,44 @@
-<form action="/admin/faculty/facultypages/NYSCertifications.html?frn=~(frn)" method="POST">
-<div id="NYSCertEdit" class="data-container">
+<form action="/admin/faculty/facultypages/NYSCertifications.html?frn=005~(gpv.udcid)" method="POST">
+    ~[DirectTable.Select:U_NYS_CERTIFICATIONS;id:~(gpv.rid)]
+    
+    <div id="NYSCertEdit">
+    
+        <table class="grid">
+        	<tr>
+        		<td class="bold">Certification Area</td>
+        		<td>
+        			<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONAREACODE" value="">
+        			    ~[x:codesetoptions;codetype=NYS_CERT_AREA;includeblank;value="~([U_NYS_CERTIFICATIONS]CERTIFICATIONAREACODE)"]
+        			</select>
+        		</td>
+        	</tr>
+        	<tr>
+        		<td class="bold">Certification Type</td>
+        		<td>
+        			<select name="[U_NYS_CERTIFICATIONS]CERTIFICATIONTYPECODE" id="CERTIFICATIONTYPECODE">
+						~[x:codesetoptions;codetype=NYS_CERT_TYPES;includeblank;value="~([U_NYS_CERTIFICATIONS]CERTIFICATIONTYPECODE)"]
+					</select>
+        		</td>
+        	</tr>
+        	<tr>
+        		<td class="bold">Effective Date</td>
+        		<td>
+        		    <input type="text" name="[U_NYS_CERTIFICATIONS]EFFECTIVEDATE" value="" class="psDateWidget" />
+        		</td>
+        	</tr>
+        	<tr>
+        		<td class="bold">Expiration Date</td>
+        		<td>
+        		    <input type="text" name="[U_NYS_CERTIFICATIONS]EXPIRATIONDATE" value="" class="psDateWidget" />
+        		</td>
+        	</tr>
+        </table>
 
-<table class="grid">
-	~[tlist_sql;
-		SELECT
-			usersdcid,
-			id,
-			certificationareacode,
-			certificationtypecode,
-			effectivedate,
-			expirationdate
-		FROM u_nys_certifications
-		WHERE id = ~(gpv.editRecord)]
-	<tr>
-		<td class="bold">Certification Area</td>
-		<td>
-			<select name="CF-[USERS:~(usersdcid;t).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:~(id)]CERTIFICATIONAREACODE" id="CERTIFICATIONAREACODE2">
-				~[x:codesetoptions;codetype=NYS_CERT_AREA;includeblank;value=~(certificationareacode;t)]
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td class="bold">Certification Type</td>
-		<td>
-			<select name="CF-[USERS:~(usersdcid;t).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:~(id)]CERTIFICATIONTYPECODE" id="CERTIFICATIONTYPECODE2">
-				~[x:codesetoptions;codetype=NYS_CERT_TYPES;includeblank;value=~(certificationtypecode;t)]
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td class="bold">Effective Date</td>
-		<td><input type="text" name="CF-[USERS:~(usersdcid;t).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:~(id)]EFFECTIVEDATE" value="~(effectivedate;d)" size="10" class="psDateWidget" id="EFFECTIVEDATE2" />)</td>
-	</tr>
-	<tr>
-		<td class="bold">Expiration Date</td>
-		<td><input type="text" name="CF-[USERS:~(usersdcid;t).U_NYS_CERTIFICATIONS.U_NYS_CERTIFICATIONS:~(id)]EXPIRATIONDATE" value="~(expirationdate;d)" size="10" class="psDateWidget" id="EXPIRATIONDATE2" /></td>
-	</tr>
-	[/tlist_sql]
-</table>
-
-<div class="button-row">
-	<input type="hidden" name="ac" value="prim">~[submitbutton]
-</div>	
+    <div class="button-row">
+		<input type="hidden" name="ac" value="prim" />
+		<a href="/admin/faculty/facultypages/NYSCertifications.html?frn=005~(gpv.udcid)" class="button">Cancel</a>
+		~[submitbutton]
+	</div>	
 
 </div>
 

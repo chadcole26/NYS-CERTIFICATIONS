@@ -1,0 +1,53 @@
+<script type="text/javascript">
+    $j(document).ready(function(){
+    	$j('#deleteButton').click(function(e){
+    		e.preventDefault();
+    		$j('#deleteForm').submit();
+    	});
+    });
+</script>
+
+<form id="deleteForm" action="/admin/faculty/facultypages/NYSCertifications.html?frn=005~(gpv.udcid)" method="POST">
+    ~[DirectTable.Select:U_NYS_CERTIFICATIONS;id:~(gpv.rid)]
+    
+    <div id="NYSCertDelete">
+    
+        <table class="grid">
+        	<tr>
+        		<td class="bold">Certification Area</td>
+        		<td>
+        			~([U_NYS_CERTIFICATIONS]CERTIFICATIONAREACODE)
+        		</td>
+        	</tr>
+        	<tr>
+        		<td class="bold">Certification Type</td>
+        		<td>
+        			~([U_NYS_CERTIFICATIONS]CERTIFICATIONTYPECODE)
+        		</td>
+        	</tr>
+        	<tr>
+        		<td class="bold">Effective Date</td>
+        		<td>
+        	        ~([U_NYS_CERTIFICATIONS]EFFECTIVEDATE)
+        		</td>
+        	</tr>
+        	<tr>
+        		<td class="bold">Expiration Date</td>
+        		<td>
+        		    ~([U_NYS_CERTIFICATIONS]EXPIRATIONDATE)
+        		</td>
+        	</tr>
+        </table>
+
+        <div class="button-row">
+    		<a href="/admin/faculty/facultypages/NYSCertifications.html?frn=005~(gpv.udcid)" class="button">Cancel</a>
+    		~[if.~(gpv.rid)>0]
+    			<button id="deleteButton">Delete</button>
+    		[/if]
+    		<input type="hidden" name="DD-U_NYS_CERTIFICATIONS.id:~(gpv.rid)" value="1">
+    	    <input type="hidden" name="ac" value="prim" />
+    	</div>	
+
+    </div>
+
+</form>
