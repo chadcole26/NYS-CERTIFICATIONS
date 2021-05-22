@@ -30,8 +30,11 @@
 					</tr> 
 				</thead> 
 				<tbody>
+					<!-- Tlist Notes:
+								No need to do the TO_CHAR on dates if you identify the output below with the date indicator
+								Did not need to join users table since we already have the users dcid from their record and the extensions table -->
 					~[tlist_sql;
-						SELECT
+            SELECT
 							unc.id,
 							unc.usersdcid,
 							unc.certificationareacode,
@@ -40,19 +43,16 @@
 							cs2.displayvalue,
 							unc.effectivedate,
 							unc.expirationdate
-							-- no need to do the TO_CHAR on dates if you identify the output below with the date indicator ';d'
 						FROM u_nys_certifications unc
-						-- did need to join users table since we already have the users dcid from their record and the extensions table 
 						JOIN codeset cs1 ON cs1.codetype='NYS_CERT_AREA' AND cs1.code = unc.certificationareacode
 						JOIN codeset cs2 ON cs2.codetype='NYS_CERT_TYPES' AND cs2.code = unc.certificationtypecode
 						WHERE unc.usersdcid = ~(rn) ORDER BY cs1.displayvalue ASC]
 					<tr>
-						<td><a href="NYSCertEdit.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Edit NYS Certification Record" class="dialogM">~(ct.certificationareacode) - ~(cs1.displayvalue)</a></td>
+						<td><a href="NYSCertEdit.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Edit NYS Certification Record" class="dialogM">~(unc.certificationareacode)</a> - ~(cs1.displayvalue)</td>
 						<td>~(unc.certificationtypecode) - ~(cs2.displayvalue)</td> 
 						<td>~(unc.effectivedate;d)</td>  
 						<td>~(unc.expirationdate;d)</td>
-						<td><a href="NYSCertDelete.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Delete NYS Certification Record" class="dialogM">Delete</a>
-						</td>  
+						<td><a href="NYSCertDelete.html?rid=~(unc.id)&udcid=~(unc.usersdcid)" title="Delete NYS Certification Record" class="dialogM">Delete</a></td>  
 					</tr>
 					[/tlist_sql]
 				</tbody>
